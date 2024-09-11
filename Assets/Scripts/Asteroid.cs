@@ -23,7 +23,7 @@ public class Asteroid : MonoBehaviour
     public void Die()
     {
         // rotating b/c z is upwards by default for particle effects 
-        AudioSource.PlayClipAtPoint(deathKnell, gameObject.transform.position); // audio doesn't work?
+        AudioSource.PlayClipAtPoint(deathKnell, gameObject.transform.position);
         Instantiate(deathExplosion, gameObject.transform.position, Quaternion.AngleAxis(-90, Vector3.right));
         GameObject obj = GameObject.Find("GlobalObject");
         Global g = obj.GetComponent<Global>();

@@ -29,7 +29,7 @@ public class TitleScript : MonoBehaviour
         }
         if (GUILayout.Button("High score"))
         {
-            Debug.Log("You should implement a high score screen");
+			SceneManager.LoadScene("HighScoreScreen");
         }
         if (GUILayout.Button("Exit"))
         {
@@ -38,4 +38,9 @@ public class TitleScript : MonoBehaviour
         }
         GUILayout.EndArea();
     }
+
+	private void OnEnable()
+	{
+		// set up player prefs 
+	}
 }
