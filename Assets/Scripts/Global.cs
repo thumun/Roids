@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Global : MonoBehaviour
@@ -14,6 +15,11 @@ public class Global : MonoBehaviour
     public Vector3 originInScreenCoords;
     public int score;
 
+    public int lives = -1;
+    public GameObject lifeCount;
+
+    public GameObject gameOver; 
+
     public GameObject ship; 
 
     public bool delete = true;
@@ -25,8 +31,15 @@ public class Global : MonoBehaviour
         timer = 0;
         spawnPeriod = 5.0f;
         ufoSpawnPeriod = 5.0f; // change to higher number
-		numberSpawnedEachPeriod = 3;
+		numberSpawnedEachPeriod = 4;
         originInScreenCoords = Camera.main.WorldToScreenPoint(new Vector3(0, 0, 0));
+
+        foreach (Transform child in lifeCount.transform)
+        {
+            lives++;
+        }
+        
+        //lives = 1;
 
         ship = GameObject.Find("Ship");
     }
@@ -44,15 +57,25 @@ public class Global : MonoBehaviour
 			float horizontalPos = UnityEngine.Random.Range(0.0f, width);
 			float verticalPos = UnityEngine.Random.Range(0.0f, height);
 
-            /*
+            
             if (delete)
             {
-                // ufo logic
+				// ufo logic
+				/*
                 Instantiate(ufo, Camera.main.ScreenToWorldPoint(
                     new Vector3(horizontalPos, verticalPos, originInScreenCoords.z)), Quaternion.identity);
-                delete = false;
+                */
+
+				horizontalPos = UnityEngine.Random.Range(0.0f, width);
+				//verticalPos = UnityEngine.Random.Range(0.0f, height);
+				verticalPos = ship.transform.position.y;
+
+				Instantiate(ufo, new Vector3(UnityEngine.Random.Range(-9.0f, 10.0f), 0, UnityEngine.Random.Range(-14.0f, 14.0f)), Quaternion.identity);
+
+
+				delete = false;
             }
-            */
+            
 
             if (delete)
             {
@@ -63,8 +86,6 @@ public class Global : MonoBehaviour
                     //verticalPos = UnityEngine.Random.Range(0.0f, height);
                     verticalPos = ship.transform.position.y;
 
-                    Debug.Log(verticalPos);
-
                     Instantiate(asteroid, new Vector3(UnityEngine.Random.Range(-9.0f, 10.0f), 0, UnityEngine.Random.Range(-14.0f, 14.0f)), Quaternion.identity);
                 }
                 delete = false;
@@ -73,36 +94,36 @@ public class Global : MonoBehaviour
         }
     }
 
-    /*
-	void OnDisable()
-	{
-        List<int> topScores = new List<int>();  
-        for (int i = 0; i < 10; i++)
+    public void shipLifeController()
+    {
+        bool lifeUsed = false;
+        if (lives > 0)
         {
-            topScores.Add(Int32.Parse(PlayerPrefs.GetString("score_" + i)));
-        }
+            Transform child = lifeCount.transform.GetChild(lives-1);
+            child.gameObject.SetActive(false);
+            lives--; 
 
-        topScores.Sort();
+            lifeUsed = true;
 
-        int indx = -1; 
-        for (int i = 0; i < 10; i++)
-        {
-            if (score < topScores[i])
+            if (lives <= 0)
             {
-                indx = i-1; 
-                break;
-            } 
-
-            else if (topScores[i] == 0)
-            {
-                indx = i;
-                break;
+                lifeUsed = false;
             }
-        }
+		}
 
-        // set score 
+        if (!lifeUsed)
+        {
+            Debug.Log("Game Over");
+            GameOver g = gameOver.GetComponent<GameOver>();
+            g.GameOverScreen(g.checkHighScore(score));
 
-        PlayerPrefs.SetInt("score", 0);	
-	}
-    */
+            Ship s = ship.GetComponent<Ship>();
+            s.deactivate = true; 
+			ship.transform.GetChild(1).gameObject.SetActive(false);
+			ship.transform.GetChild(2).gameObject.SetActive(false);
+
+			gameOver.gameObject.SetActive(true);
+			
+		}
+    }
 }

@@ -41,8 +41,16 @@ public class BulletScript : MonoBehaviour
             // destroying bullet after collision 
             Destroy(gameObject);
         }
-        // add logic for ufo 
-        else
+		else if (collider.CompareTag("Ufo"))
+		{
+			ufo ufo = collider.gameObject.GetComponent<ufo>();
+
+			ufo.Die();
+			// destroying bullet after collision 
+			Destroy(gameObject);
+		}
+		// add logic for ufo 
+		else
         {
             Debug.Log("Collided with " + collider.tag);
         }

@@ -30,4 +30,50 @@ public class Asteroid : MonoBehaviour
         g.score += pointValue;
         Destroy(gameObject);
     }
+
+	private void OnTriggerEnter(Collider other)
+	{
+		if (other.CompareTag("Ship"))
+		{
+			Ship ship = other.gameObject.GetComponent<Ship>();
+
+			ship.Die();
+			// destroying bullet after collision 
+			Destroy(gameObject);
+		}
+		else if (other.CompareTag("Forcefield"))
+		{
+			forcefield field = other.gameObject.GetComponent<forcefield>();
+			field.collisionNum--;
+
+			Destroy(gameObject);
+		}
+
+		// add logic for ufo 
+		else
+		{
+			Debug.Log("Collided with " + other.tag);
+		}
+	}
+
+	/*
+	private void OnCollisionEnter(Collision collision)
+	{
+		Collider collider = collision.collider;
+		if (collider.CompareTag("Ship"))
+		{
+			Ship ship = collider.gameObject.GetComponent<Ship>();
+
+			ship.Die();
+			// destroying bullet after collision 
+			Destroy(gameObject);
+		}
+		// add logic for ufo 
+		else
+		{
+			Debug.Log("Collided with " + collider.tag);
+		}
+	}
+	*/
+	
 }

@@ -7,13 +7,20 @@ public class Ship : MonoBehaviour
     public Vector3 forceVector;
     public float rotationSpeed;
     public float rotation;
-    public GameObject bullet; 
+    public GameObject bullet;
+	public AudioClip deathKnell;
 
-    // Start is called before the first frame update
-    void Start()
+    public GameObject forcefield; 
+
+    public bool deactivate;
+
+	// Start is called before the first frame update
+	void Start()
     {
       forceVector.x = 1.0f;
       rotationSpeed = 2.0f; 
+
+      deactivate = false;
     }
 
    void FixedUpdate()
@@ -41,7 +48,7 @@ public class Ship : MonoBehaviour
    // Update is called once per frame
    void Update()
    {
-        if (Input.GetButtonDown("Fire1"))
+        if (Input.GetButtonDown("Fire1") && !deactivate)
         {
             Debug.Log("Fire! " + rotation); 
 
@@ -63,4 +70,29 @@ public class Ship : MonoBehaviour
 
         }
    }
+
+	public void Die()
+	{
+		// rotating b/c z is upwards by default for particle effects 
+		AudioSource.PlayClipAtPoint(deathKnell, gameObject.transform.position);
+		//Instantiate(deathExplosion, gameObject.transform.position, Quaternion.AngleAxis(-90, Vector3.right));
+
+		// camera shake effect
+		Transform cam = transform.GetChild(3).GetChild(0);
+		CameraDetails c = cam.GetComponent<CameraDetails>();
+
+		StartCoroutine(c.Shake(0.4f, 2.0f));
+
+		GameObject obj = GameObject.Find("GlobalObject");
+		Global g = obj.GetComponent<Global>();
+        g.shipLifeController();
+
+		//Destroy(gameObject);
+	}
+
+    public void EnableForcefields()
+    {
+        forcefield.SetActive(true); 
+	}
+
 }

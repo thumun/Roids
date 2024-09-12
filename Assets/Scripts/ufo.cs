@@ -20,7 +20,7 @@ public class ufo : MonoBehaviour
 		pointValue = 30;
 		ship = GameObject.Find("Ship").gameObject;
 		timer = 0;
-		bulletSpawnPeriod = 3.0f; 
+		bulletSpawnPeriod = 6.0f; 
 
 	}
 
@@ -40,10 +40,9 @@ public class ufo : MonoBehaviour
 			// instantiate bullet 
 			GameObject obj = Instantiate(bullet, spawnPos, Quaternion.identity) as GameObject;
 		}
-		
 
 		//Debug.Log(ship.transform.position);
-		transform.position = Vector3.MoveTowards(transform.position, ship.transform.position + new Vector3(1.5f, 0, 1.5f), 0.2f);
+		transform.position = Vector3.MoveTowards(transform.position, ship.transform.position + new Vector3(1.5f, 0, 1.5f), 0.02f);
 
 	}
 
@@ -51,7 +50,7 @@ public class ufo : MonoBehaviour
 	{
 	}
 
-	/*
+	
 	public void Die()
 	{
 		// rotating b/c z is upwards by default for particle effects 
@@ -60,8 +59,11 @@ public class ufo : MonoBehaviour
 		GameObject obj = GameObject.Find("GlobalObject");
 		Global g = obj.GetComponent<Global>();
 		g.score += pointValue;
+
+		Ship s = ship.GetComponent<Ship>();
+		s.EnableForcefields();
+
 		Destroy(gameObject);
 	}
-	*/
 
 }

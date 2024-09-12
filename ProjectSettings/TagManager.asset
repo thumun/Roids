@@ -8,6 +8,8 @@ TagManager:
   - Asteroid
   - Ship
   - Ufo
+  - UfoBullet
+  - Forcefield
   layers:
   - Default
   - TransparentFX

@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Xml.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -10,7 +12,17 @@ public class TitleScript : MonoBehaviour
     void Start()
     {
         
-    }
+        if (!PlayerPrefs.HasKey("name_0"))
+        {
+			for (int i = 0; i < 10; i++)
+			{
+				//PlayerPrefs.SetInt($"score_{i}", -1);
+				PlayerPrefs.SetString($"name_{i}", "");
+				PlayerPrefs.Save();
+			}
+		}
+
+	}
 
     // Update is called once per frame
     void Update()

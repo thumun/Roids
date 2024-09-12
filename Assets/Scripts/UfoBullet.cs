@@ -17,16 +17,48 @@ public class UfoBullet : MonoBehaviour
 	{
 		transform.position = Vector3.MoveTowards(transform.position, ship.transform.position, 0.2f);
 	}
+	private void OnTriggerEnter(Collider other)
+	{
+		if (other.CompareTag("Ship"))
+		{
+			Ship ship = other.gameObject.GetComponent<Ship>();
 
+			ship.Die();
+			// destroying bullet after collision 
+			Destroy(gameObject);
+		}
+		else if (other.CompareTag("Forcefield"))
+		{
+			forcefield field = other.gameObject.GetComponent<forcefield>();
+			field.collisionNum--;
+
+			Destroy(gameObject);
+		}
+
+		// add logic for ufo 
+		else
+		{
+			Debug.Log("Collided with " + other.tag);
+		}
+	}
+
+	/*
 	private void OnCollisionEnter(Collision collision)
 	{
 		Collider collider = collision.collider;
 		if (collider.CompareTag("Ship"))
 		{
-			// ship life lost logic 
-			Debug.Log("Ship Hit by UFO");
+			Ship ship = collider.gameObject.GetComponent<Ship>();
 
+			ship.Die();
 			// destroying bullet after collision 
+			Destroy(gameObject);
+		}
+		// add logic for ufo 
+		else if (collider.CompareTag("Forcefield"))
+		{
+			forcefield field = collider.gameObject.GetComponent<forcefield>();
+			field.collisionNum--; 
 			Destroy(gameObject);
 		}
 		else
@@ -34,4 +66,5 @@ public class UfoBullet : MonoBehaviour
 			Debug.Log("Collided with " + collider.tag);
 		}
 	}
+	*/
 }
