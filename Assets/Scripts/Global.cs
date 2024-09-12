@@ -17,6 +17,9 @@ public class Global : MonoBehaviour
     public int score;
 
     public int lives = -1;
+
+    public int alienDeathCount = 3; 
+
     public GameObject lifeCount;
 
     public GameObject gameOver; 
@@ -32,9 +35,10 @@ public class Global : MonoBehaviour
         timer = 0;
         ufotimer = 0; 
 		spawnPeriod = 5.0f;
-        ufoSpawnPeriod = 50.0f; // change to higher number
+        ufoSpawnPeriod = 10.0f; // change to higher number
 		numberSpawnedEachPeriod = 4;
-        originInScreenCoords = Camera.main.WorldToScreenPoint(new Vector3(0, 0, 0));
+        alienDeathCount = 1;
+		originInScreenCoords = Camera.main.WorldToScreenPoint(new Vector3(0, 0, 0));
 
         foreach (Transform child in lifeCount.transform)
         {
@@ -49,6 +53,21 @@ public class Global : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
+        if (alienDeathCount < 0)
+        {
+            Debug.Log("Win");
+            timer = 0;
+            ufotimer = 0;
+
+            GameOverLogic(true);
+		}
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Application.Quit();
+        }
+
         timer += Time.deltaTime;
         ufotimer += Time.deltaTime;
 
@@ -114,7 +133,10 @@ public class Global : MonoBehaviour
 
         if (!lifeUsed)
         {
-            Debug.Log("Game Over");
+            GameOverLogic(false);
+
+            /*
+			Debug.Log("Game Over");
             GameOver g = gameOver.GetComponent<GameOver>();
             g.GameOverScreen(g.checkHighScore(score));
 
@@ -124,7 +146,33 @@ public class Global : MonoBehaviour
 			ship.transform.GetChild(2).gameObject.SetActive(false);
 
 			gameOver.gameObject.SetActive(true);
+            */
 			
 		}
     }
+
+    public void GameOverLogic(bool isWin)
+    {
+		Debug.Log("Game Over");
+
+		GameOver g = gameOver.GetComponent<GameOver>();
+
+		if (isWin)
+        {
+			g.Win(g.checkHighScore(score));
+
+
+		}
+        else
+        {
+			g.Loss();
+		}
+
+		Ship s = ship.GetComponent<Ship>();
+		s.deactivate = true;
+		ship.transform.GetChild(1).gameObject.SetActive(false);
+		ship.transform.GetChild(2).gameObject.SetActive(false);
+
+		gameOver.gameObject.SetActive(true);
+	}
 }

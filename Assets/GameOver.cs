@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
-using UnityEditor.Experimental.GraphView;
+//using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.SocialPlatforms.Impl;
@@ -40,6 +40,7 @@ public class Score
     public GameObject highScoreUI;
     public GameObject gameOverScreen;
 	public GameObject inputName;
+	public GameObject win; 
 
 	private int score;
 	bool returnVal = false;
@@ -89,13 +90,36 @@ public class Score
 		return returnVal; 
     }
 
-    public void GameOverScreen(bool highScore)
+	public void Loss()
+	{
+		gameOver.gameObject.SetActive(true);
+		gameOverScreen.SetActive(true);
+	}
+
+	public void Win(bool highScore)
+	{
+		gameOver.gameObject.SetActive(true);
+
+		if (highScore)
+		{
+			highScoreUI.gameObject.SetActive(highScore);
+
+		}
+		else
+		{
+			win.gameObject.SetActive(true);
+		}
+	}
+
+	/*
+	public void GameOverScreen(bool highScore)
     {
 		highScoreUI.gameObject.SetActive(highScore);
 		gameOver.gameObject.SetActive(true);
 
 		gameOverScreen.SetActive(!highScore);
 	}
+	*/
 
     void ReturntoTitle()
     {

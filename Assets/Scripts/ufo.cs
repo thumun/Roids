@@ -64,6 +64,7 @@ public class ufo : MonoBehaviour
 		GameObject obj = GameObject.Find("GlobalObject");
 		Global g = obj.GetComponent<Global>();
 		g.score += pointValue;
+		g.alienDeathCount--;
 
 		Ship s = ship.GetComponent<Ship>();
 		s.EnableForcefields();
