@@ -9,6 +9,7 @@ public class Global : MonoBehaviour
     public GameObject asteroid;
     public GameObject ufo;
     public float timer;
+    public float ufotimer; 
     public float spawnPeriod;
     public float ufoSpawnPeriod;
     public int numberSpawnedEachPeriod;
@@ -22,15 +23,16 @@ public class Global : MonoBehaviour
 
     public GameObject ship; 
 
-    public bool delete = true;
+    //public bool delete = true;
 
 	// Start is called before the first frame update
 	void Start()
     {
         score = 0;
         timer = 0;
-        spawnPeriod = 5.0f;
-        ufoSpawnPeriod = 5.0f; // change to higher number
+        ufotimer = 0; 
+		spawnPeriod = 5.0f;
+        ufoSpawnPeriod = 50.0f; // change to higher number
 		numberSpawnedEachPeriod = 4;
         originInScreenCoords = Camera.main.WorldToScreenPoint(new Vector3(0, 0, 0));
 
@@ -48,7 +50,30 @@ public class Global : MonoBehaviour
     void Update()
     {
         timer += Time.deltaTime;
-        if (timer > spawnPeriod)
+        ufotimer += Time.deltaTime;
+
+		// ufo logic
+
+		if (ufotimer > ufoSpawnPeriod)
+        {
+
+            ufotimer = 0; 
+
+			float width = Screen.width;
+			float height = Screen.height;
+
+			float horizontalPos = UnityEngine.Random.Range(0.0f, width);
+			float verticalPos = UnityEngine.Random.Range(0.0f, height);
+
+			horizontalPos = UnityEngine.Random.Range(0.0f, width);
+			//verticalPos = UnityEngine.Random.Range(0.0f, height);
+			verticalPos = ship.transform.position.y;
+
+			Instantiate(ufo, new Vector3(UnityEngine.Random.Range(-9.0f, 10.0f), 0, UnityEngine.Random.Range(-14.0f, 14.0f)), Quaternion.identity);
+
+		}
+
+		if (timer > spawnPeriod)
         {
             timer = 0;
             float width = Screen.width;
@@ -56,39 +81,15 @@ public class Global : MonoBehaviour
 
 			float horizontalPos = UnityEngine.Random.Range(0.0f, width);
 			float verticalPos = UnityEngine.Random.Range(0.0f, height);
-
             
-            if (delete)
+			// asteroid logic
+			for (int i = 0; i < numberSpawnedEachPeriod; i++)
             {
-				// ufo logic
-				/*
-                Instantiate(ufo, Camera.main.ScreenToWorldPoint(
-                    new Vector3(horizontalPos, verticalPos, originInScreenCoords.z)), Quaternion.identity);
-                */
+                horizontalPos = UnityEngine.Random.Range(0.0f, width);
+                //verticalPos = UnityEngine.Random.Range(0.0f, height);
+                verticalPos = ship.transform.position.y;
 
-				horizontalPos = UnityEngine.Random.Range(0.0f, width);
-				//verticalPos = UnityEngine.Random.Range(0.0f, height);
-				verticalPos = ship.transform.position.y;
-
-				Instantiate(ufo, new Vector3(UnityEngine.Random.Range(-9.0f, 10.0f), 0, UnityEngine.Random.Range(-14.0f, 14.0f)), Quaternion.identity);
-
-
-				delete = false;
-            }
-            
-
-            if (delete)
-            {
-                // asteroid logic
-                for (int i = 0; i < numberSpawnedEachPeriod; i++)
-                {
-                    horizontalPos = UnityEngine.Random.Range(0.0f, width);
-                    //verticalPos = UnityEngine.Random.Range(0.0f, height);
-                    verticalPos = ship.transform.position.y;
-
-                    Instantiate(asteroid, new Vector3(UnityEngine.Random.Range(-9.0f, 10.0f), 0, UnityEngine.Random.Range(-14.0f, 14.0f)), Quaternion.identity);
-                }
-                delete = false;
+                Instantiate(asteroid, new Vector3(UnityEngine.Random.Range(-9.0f, 10.0f), 0, UnityEngine.Random.Range(-14.0f, 14.0f)), Quaternion.identity);
             }
             
         }
