@@ -8,6 +8,9 @@ public class ufo : MonoBehaviour
 	public int pointValue;
 	public GameObject deathExplosion;
 	public AudioClip deathKnell;
+
+	public AudioClip bulletSound;
+
 	public GameObject ship;
 	public GameObject bullet;
 
@@ -38,6 +41,8 @@ public class ufo : MonoBehaviour
 			spawnPos.z -= 1.5f * Mathf.Sin(ship.transform.rotation.y * Mathf.PI / 180);
 
 			// instantiate bullet 
+			AudioSource.PlayClipAtPoint(bulletSound, gameObject.transform.position);
+
 			GameObject obj = Instantiate(bullet, spawnPos, Quaternion.identity) as GameObject;
 		}
 

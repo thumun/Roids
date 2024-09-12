@@ -10,7 +10,9 @@ public class Ship : MonoBehaviour
     public GameObject bullet;
 	public AudioClip deathKnell;
 
-    public GameObject forcefield; 
+	public AudioClip bulletSound;
+
+	public GameObject forcefield; 
 
     public bool deactivate;
 
@@ -56,10 +58,12 @@ public class Ship : MonoBehaviour
             // in the ship
             Vector3 spawnPos = gameObject.transform.position;
             spawnPos.x += 1.5f * Mathf.Cos(rotation * Mathf.PI / 180);
-            spawnPos.z -= 1.5f * Mathf.Sin(rotation * Mathf.PI / 180); 
+            spawnPos.z -= 1.5f * Mathf.Sin(rotation * Mathf.PI / 180);
 
-            // instantiate bullet 
-            GameObject obj = Instantiate(bullet, spawnPos, Quaternion.identity) as GameObject;
+			// instantiate bullet 
+			AudioSource.PlayClipAtPoint(bulletSound, gameObject.transform.position);
+
+			GameObject obj = Instantiate(bullet, spawnPos, Quaternion.identity) as GameObject;
 
             // initialize bullet script 
             BulletScript b = obj.GetComponent<BulletScript>();
